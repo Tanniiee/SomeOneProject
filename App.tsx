@@ -16,12 +16,17 @@ import MiniGamePikachu from './android/app/src/Screen/MiniGamePikachu';
 import PayOS from './android/app/src/Screen/PayOs';
 import Musicplayer from './android/app/src/Screen/MusicPlayer';
 import GameMath from './android/app/src/Screen/GameMath';
+import {Provider} from 'react-redux';
+import {store} from './android/app/src/ASM/Redux/Store';
+import Sms from './android/app/src/Screen/Sms';
+import EditProfile from './android/app/src/ASM/StackScreen/EditProfile';
+import AppStack from './android/app/src/ASM/Navigation/AppStack';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Musicplayer/>
-    </NavigationContainer>
+    <Provider store={store}>
+      <AppStack/>
+    </Provider>
   );
 };
 export default App;

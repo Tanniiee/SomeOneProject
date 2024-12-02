@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,44 +7,48 @@ import {
   Image,
   StyleSheet,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useDispatch, useSelector } from 'react-redux';
+import { Register } from '../Redux/Slice/RegisterSlice';
 
-export default function SignUp({navigation}) {
+export default function SignUp({ navigation }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [confirm, setConfirm] = useState('');
   const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
- const handleSignUp = async () => {
-   if (password !== confirm) {
-     Alert.alert('Lỗi', 'Mật khẩu và xác nhận mật khẩu không khớp');
-     return;
-   }
+  const dispatch = useDispatch();
+  const { registerData, registerStatus } = useSelector(state => state.register);
 
-   try {
-     const response = await fetch('http://192.168.1.17:3000/users/signup', {
-       method: 'POST',
-       headers: {
-         'Content-Type': 'application/json',
-       },
-       body: JSON.stringify({name, email, password}),
-     });
+  // Xử lý khi trạng thái thay đổi
+  useEffect(() => {
+    if (registerStatus === 'succeeded') {
+      if (registerData?.status === true) {
+        ToastAndroid.show(registerData.message, ToastAndroid.SHORT);
+        navigation.navigate('LogIn');
+      } else {
+        ToastAndroid.show(
+          registerData?.message || 'Đăng ký thất bại',
+          ToastAndroid.SHORT,
+        );
+      }
+    } else if (registerStatus === 'failed') {
+      ToastAndroid.show('Có lỗi xảy ra khi đăng ký', ToastAndroid.SHORT);
+    }
+  }, [registerStatus, registerData]);
 
-     const data = await response.json();
-     if (data.status) {
-       Alert.alert('Thành công', 'Đăng ký thành công');
-       
-       navigation.navigate('LogIn', {email, password});
-     } else {
-       Alert.alert('Lỗi', data.message || 'Đăng ký thất bại');
-     }
-   } catch (error) {
-     Alert.alert('Lỗi', 'Không thể kết nối tới máy chủ');
-   }
- };
+  // Xử lý khi người dùng bấm nút Đăng ký
+  const handleSignUp = () => {
+    if (password !== confirm) {
+     ToastAndroid.show('Mật khẩu không khớp', ToastAndroid.SHORT);
+      return;
+    }
 
+    dispatch(Register({name, email, password}));
+  };
 
   return (
     <View style={styles.container}>
@@ -98,7 +102,7 @@ export default function SignUp({navigation}) {
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
-              placeholder="Confirm password"
+              placeholder="Xác nhận mật khẩu"
               value={confirm}
               onChangeText={setConfirm}
               secureTextEntry={!showPassword}
@@ -158,7 +162,6 @@ export default function SignUp({navigation}) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   content: {
     top: -150,

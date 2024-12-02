@@ -27,7 +27,7 @@ const Detail = props => {
   };
 
   return (
-    <View>
+    <View style={{backgroundColor:'#fff'}}>
       {/* header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -38,10 +38,13 @@ const Detail = props => {
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>{product.productName}</Text>
-        <Image
+        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+            <Image
           style={styles.icon}
           source={require('../assets/icon/cart.png')}
         />
+        </TouchableOpacity>
+      
       </View>
 
       {/* Image product */}
@@ -50,14 +53,7 @@ const Detail = props => {
       </View>
 
       <View style={styles.prevNext}>
-        <Image
-          style={styles.icon}
-          source={require('../assets/icon/prev.png')}
-        />
-        <Image
-          style={styles.icon}
-          source={require('../assets/icon/next.png')}
-        />
+
       </View>
 
       {/* loại */}
@@ -69,7 +65,7 @@ const Detail = props => {
 
       {/* Giá */}
       <View>
-        <Text style={styles.price}>{product.price}đ</Text>
+        <Text style={styles.price}>{product.price.toLocaleString()}đ</Text>
       </View>
 
       {/* Chi tiết sản phẩm */}
@@ -116,7 +112,7 @@ const Detail = props => {
         <View style={{marginLeft: 100}}>
           <Text style={styles.textdetai}>Tạm tính</Text>
           <View style={styles.slcontainer}>
-            <Text style={{fontSize: 24, color: '#000'}}>{total}đ</Text>
+            <Text style={{fontSize: 24, color: '#000'}}>{total.toLocaleString()}đ</Text>
           </View>
         </View>
       </View>
@@ -227,6 +223,7 @@ const styles = StyleSheet.create({
   containerImage: {
     alignItems: 'center',
     marginTop: 20,
+    backgroundColor:'#fff'
   },
   image: {
     width: 260,

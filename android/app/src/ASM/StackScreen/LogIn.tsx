@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,36 +6,45 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  ToastAndroid,
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useDispatch, useSelector} from 'react-redux';
+import {Login} from '../Redux/Slice/LoginSlice';
 
 export default function LoginScreen({navigation, route}) {
   const {email, password} = route.params || {};
-  const [userEmail, setEmail] = useState(email || '');
-  const [userPassword, setPassword] = useState(password || '');
+  const [userEmail, setEmail] = useState(email || '1');
+  const [userPassword, setPassword] = useState(password || '1');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async () => {
-    try {
-      const response = await fetch('http://192.168.1.17:3000/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email: userEmail, password: userPassword}),
-      });
+  const dispatch = useDispatch();
+  const {loginData, loginStatus} = useSelector(state => state.login);
 
-      const data = await response.json();
-      if (data.status) {
-        Alert.alert('Thành công', 'Đăng nhập thành công');
+  useEffect(() => {
+     console.log('Login Status:', loginStatus);
+     console.log('Login Data:', loginData);
+    if (loginStatus === 'succeeded') {
+      if (loginData?.status === true) {
         navigation.navigate('Home');
       } else {
-        Alert.alert('Lỗi', data.message || 'Đăng nhập thất bại');
+        ToastAndroid.show(
+          loginData?.message || 'Đăng nhập thất bại',
+          ToastAndroid.SHORT,
+        );
       }
-    } catch (error) {
-      Alert.alert('Lỗi', 'Không thể kết nối tới máy chủ');
+    } else if (loginStatus === 'failed') {
+      ToastAndroid.show('Có lỗi xảy ra khi đăng nhập', ToastAndroid.SHORT);
     }
+  }, [loginStatus, loginData]);
+
+  const handleLogin = async () => {
+    if (!userEmail || !userPassword) {
+    ToastAndroid.show('Vui lòng nhập email và mật khẩu', ToastAndroid.SHORT);
+      return;
+    }
+    dispatch(Login({email: userEmail, password: userPassword}));
   };
 
   return (

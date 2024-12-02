@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const TabBar = createBottomTabNavigator();
 
 const Tab = () => {
+  
   return (
     <TabBar.Navigator
       initialRouteName="Home"
@@ -31,7 +32,7 @@ const Tab = () => {
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home';
           } else if (route.name === 'Search') {
-            iconName = focused ? 'heart' : 'heart-o';
+            iconName = focused ? 'search' : 'search';
           } else if (route.name === 'Notifications') {
             iconName = focused ? 'bell' : 'bell-o';
           } else if (route.name === 'User') {
@@ -44,8 +45,8 @@ const Tab = () => {
         tabBarInactiveTintColor: 'gray',
       })}>
       <TabBar.Screen name="Home" component={Home} />
-      <TabBar.Screen name="Notifications" component={Notifications} />
       <TabBar.Screen name="Search" component={Search} />
+      <TabBar.Screen name="Notifications" component={Notifications} />
       <TabBar.Screen name="User" component={User} />
     </TabBar.Navigator>
   );

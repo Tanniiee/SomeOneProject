@@ -28,8 +28,10 @@ const PayOs = () => {
         '&returnUrl=' +
         returnUrl,
       checkSum,
+  
     );
 
+    console.log(signature);
     var body = {
       orderCode: orderCode,
       amount: amount,

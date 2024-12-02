@@ -11,7 +11,12 @@ const User = (props) => {
       <Text style={styles.tittle}>PROFILE</Text>
       {/* thông tin cá nhân */}
       <View style={styles.profile}>
-        <Image style={styles.img} source={require('../assets/gg.png')} />
+        <Image
+          style={styles.img}
+          source={{
+            uri: 'https://i.pinimg.com/736x/e2/a9/71/e2a97129b338617ac78ffc73df2f4ec6.jpg',
+          }}
+        />
         <View>
           <Text style={styles.name}>Đặng Thị Thu Thảo </Text>
           <Text style={styles.email}>Dangthao11099@gmail.com</Text>
@@ -22,16 +27,16 @@ const User = (props) => {
         <Text style={styles.tittle2}>Chung</Text>
         <View style={styles.line} />
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <Text style={styles.text}>Chỉnh sửa thông tin</Text>
           </TouchableOpacity>
           <TouchableOpacity>
             <Text style={styles.text}>Cẩm nang trồng cây</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('History')}>
             <Text style={styles.text}>Lịch sử giao dịch</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('QA')}>
             <Text style={styles.text}>Q & A</Text>
           </TouchableOpacity>
         </View>
@@ -69,6 +74,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginTop: 20,
     color: '#FF0000',
+    textAlign:'center',
   },
   line: {
     borderWidth: 0.5,
@@ -93,12 +99,13 @@ const styles = StyleSheet.create({
   img: {
     width: 40,
     height: 40,
+    borderRadius: 50,
   },
   container: {
     padding: 30,
   },
   tittle: {
-    textAlign:'center',
+    textAlign: 'center',
     fontSize: 16,
     fontWeight: '500',
     color: '#221F1F',
